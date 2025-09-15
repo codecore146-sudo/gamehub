@@ -1,0 +1,3349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Your Gaming Destination</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            color: white;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body:before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: floatingOrbs 10s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        @keyframes floatingOrbs {
+            0%, 100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .page {
+            display: none;
+            padding: 2rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: pageSlideIn 0.6s ease-out;
+        }
+        
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover:before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+            animation: none;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+            }
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: cardSlideUp 0.8s ease-out forwards;
+        }
+        
+        .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        
+        .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+        
+        .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes cardSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .feature-card:nth-child(1) .feature-icon {
+            animation-delay: 0.5s;
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            animation-delay: 0.7s;
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            animation-delay: 0.9s;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8) translateY(30px);
+            animation: gameCardAppear 0.6s ease-out forwards;
+        }
+        
+        .game-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .game-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .game-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05) rotateY(5deg);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes gameCardAppear {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .game-card:hover .game-icon {
+            transform: rotateY(360deg) scale(1.1);
+        }
+        
+        .tic-tac-toe {
+            max-width: 500px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: boardAppear 0.8s ease-out forwards;
+        }
+        
+        @keyframes boardAppear {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 15px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.5) rotateY(180deg);
+            animation: cellAppear 0.5s ease-out forwards;
+        }
+        
+        .cell:nth-child(1) { animation-delay: 0.1s; }
+        .cell:nth-child(2) { animation-delay: 0.15s; }
+        .cell:nth-child(3) { animation-delay: 0.2s; }
+        .cell:nth-child(4) { animation-delay: 0.25s; }
+        .cell:nth-child(5) { animation-delay: 0.3s; }
+        .cell:nth-child(6) { animation-delay: 0.35s; }
+        .cell:nth-child(7) { animation-delay: 0.4s; }
+        .cell:nth-child(8) { animation-delay: 0.45s; }
+        .cell:nth-child(9) { animation-delay: 0.5s; }
+        
+        .cell:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1) rotateZ(5deg);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cell:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+        
+        .cell:disabled {
+            cursor: not-allowed;
+        }
+        
+        .cell.placed {
+            animation: cellPlace 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes cellAppear {
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+        
+        @keyframes cellPlace {
+            0% {
+                transform: scale(0.3) rotateZ(180deg);
+            }
+            50% {
+                transform: scale(1.2) rotateZ(90deg);
+            }
+            100% {
+                transform: scale(1) rotateZ(0deg);
+            }
+        }
+        
+        .game-status {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            min-height: 2rem;
+        }
+        
+        .reset-button {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        /* Wordle Styles */
+        .wordle-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .wordle-status {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            min-height: 1.5rem;
+        }
+
+        .wordle-grid {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 5px;
+            margin: 2rem 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: boardAppear 0.8s ease-out forwards;
+        }
+
+        .wordle-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        .wordle-tile {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .wordle-tile.filled {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            animation: tileFlip 0.3s ease;
+        }
+
+        .wordle-tile.correct {
+            background: linear-gradient(135deg, #6aaa64, #5a9a54);
+            border-color: #6aaa64;
+            animation: tileReveal 0.6s ease forwards;
+        }
+
+        .wordle-tile.present {
+            background: linear-gradient(135deg, #c9b458, #b9a448);
+            border-color: #c9b458;
+            animation: tileReveal 0.6s ease forwards;
+        }
+
+        .wordle-tile.absent {
+            background: linear-gradient(135deg, #787c7e, #686c6e);
+            border-color: #787c7e;
+            animation: tileReveal 0.6s ease forwards;
+        }
+
+        @keyframes tileFlip {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes tileReveal {
+            0% {
+                transform: rotateY(0deg);
+            }
+            50% {
+                transform: rotateY(90deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+
+        .wordle-keyboard {
+            margin: 2rem 0;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 12px 8px;
+            min-width: 35px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .key:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .key.wide {
+            min-width: 60px;
+            font-size: 0.8rem;
+        }
+
+        .key.correct {
+            background: linear-gradient(135deg, #6aaa64, #5a9a54);
+        }
+
+        .key.present {
+            background: linear-gradient(135deg, #c9b458, #b9a448);
+        }
+
+        .key.absent {
+            background: linear-gradient(135deg, #787c7e, #686c6e);
+        }
+
+        .wordle-controls {
+            margin-top: 2rem;
+        }
+
+        /* Gorilla Jump Game Styles */
+        .gorilla-game {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .game-canvas {
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #228B22 100%);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: block;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .gorilla-score {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: #fff;
+        }
+
+        .gorilla-instructions {
+            font-size: 1.1rem;
+            margin: 1rem 0;
+            opacity: 0.9;
+        }
+
+        .gorilla-controls {
+            margin-top: 2rem;
+        }
+
+        /* Balloon Pop Game Styles */
+        .balloon-game {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .balloon-canvas {
+            background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: block;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: crosshair;
+        }
+
+        .balloon-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .balloon-level {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .balloon-score {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .balloon-timer {
+            background: linear-gradient(45deg, #a8e6cf, #7fcdcd);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .balloon-instructions {
+            font-size: 1.1rem;
+            margin: 1rem 0;
+            opacity: 0.9;
+        }
+
+        .balloon-controls {
+            margin-top: 2rem;
+        }
+
+        .level-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .level-complete h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #4ecdc4;
+        }
+
+        .level-complete p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Donation Page Styles */
+        .donate-hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .donate-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .donate-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .donation-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .donation-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .donation-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .donation-card:hover:before {
+            opacity: 0.1;
+        }
+
+        .donation-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .donation-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+        }
+
+        .donation-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .donation-card p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .donate-button {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .donate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.4);
+            background: linear-gradient(45deg, #44a08d, #4ecdc4);
+        }
+
+        .donate-button.premium {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .donate-button.premium:hover {
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .donate-button.vip {
+            background: linear-gradient(45deg, #a8e6cf, #7fcdcd);
+        }
+
+        .donate-button.vip:hover {
+            background: linear-gradient(45deg, #7fcdcd, #a8e6cf);
+            box-shadow: 0 10px 25px rgba(127, 205, 205, 0.4);
+        }
+
+        .donation-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .donation-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #4ecdc4;
+        }
+
+        .donation-info p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-notice {
+            background: linear-gradient(45deg, #ff9ff3, #54a0ff);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Dog Care Game Styles */
+        .dog-care-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .dog-world {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #90EE90 60%, #228B22 100%);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            margin: 2rem 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .dog-moveable {
+            position: absolute;
+            font-size: 3rem;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            z-index: 10;
+            bottom: 100px;
+            left: 400px;
+        }
+
+        .dog-moveable.walking {
+            animation: dogWalk 0.5s ease-in-out;
+        }
+
+        .dog-moveable.happy {
+            animation: dogHappy 1s ease-in-out;
+        }
+
+        .dog-moveable.sad {
+            filter: grayscale(50%);
+            animation: dogSad 1s ease-in-out;
+        }
+
+        @keyframes dogWalk {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1) rotate(-2deg); }
+            75% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .owner {
+            position: absolute;
+            font-size: 3rem;
+            bottom: 120px;
+            right: 50px;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .owner:hover {
+            transform: scale(1.1);
+        }
+
+        .owner.calling {
+            animation: ownerCall 1s ease-in-out;
+        }
+
+        @keyframes ownerCall {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        .world-object {
+            position: absolute;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .world-object:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
+        .food-bowl {
+            bottom: 50px;
+            left: 100px;
+        }
+
+        .water-bowl {
+            bottom: 50px;
+            left: 150px;
+        }
+
+        .dog-bed {
+            bottom: 80px;
+            left: 200px;
+        }
+
+        .toy-box {
+            bottom: 60px;
+            left: 50px;
+        }
+
+        .door {
+            bottom: 150px;
+            right: 20px;
+        }
+
+        .tree {
+            bottom: 100px;
+            left: 150px;
+            display: none;
+        }
+
+        .fire-hydrant {
+            bottom: 50px;
+            left: 300px;
+            display: none;
+        }
+
+        .park-bench {
+            bottom: 80px;
+            right: 200px;
+            display: none;
+        }
+
+        .movement-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+
+        .move-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .move-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        .move-btn:active {
+            transform: translateY(0);
+        }
+
+        .location-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .weather-time {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .random-events {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            max-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        .random-events.show {
+            transform: translateX(0);
+        }
+
+        .bladder-cleanliness {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .dog-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .stat-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-bar span:first-child {
+            min-width: 80px;
+            text-align: left;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill.health {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+        }
+
+        .progress-fill.hunger {
+            background: linear-gradient(90deg, #feca57, #ff9ff3);
+        }
+
+        .progress-fill.happiness {
+            background: linear-gradient(90deg, #48dbfb, #0abde3);
+        }
+
+        .progress-fill.energy {
+            background: linear-gradient(90deg, #1dd1a1, #10ac84);
+        }
+
+        .dog-display {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .dog-container {
+            position: relative;
+        }
+
+        .dog {
+            display: inline-block;
+            position: relative;
+            animation: dogBounce 3s ease-in-out infinite;
+        }
+
+        .dog-body {
+            font-size: 4rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dog-body:hover {
+            transform: scale(1.1);
+        }
+
+        .dog.happy .dog-body {
+            animation: dogHappy 1s ease-in-out;
+        }
+
+        .dog.sad .dog-body {
+            filter: grayscale(50%);
+            animation: dogSad 1s ease-in-out;
+        }
+
+        .dog.sleeping .dog-body {
+            animation: dogSleep 2s ease-in-out infinite;
+        }
+
+        .dog.playing .dog-body {
+            animation: dogPlay 0.5s ease-in-out 3;
+        }
+
+        @keyframes dogBounce {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes dogHappy {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.2) rotate(-5deg);
+            }
+            75% {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+
+        @keyframes dogSad {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(5px);
+            }
+        }
+
+        @keyframes dogSleep {
+            0%, 100% {
+                transform: rotate(-2deg);
+            }
+            50% {
+                transform: rotate(2deg);
+            }
+        }
+
+        @keyframes dogPlay {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-15deg) scale(1.1);
+            }
+            75% {
+                transform: rotate(15deg) scale(1.1);
+            }
+        }
+
+        .dog-status {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            min-height: 1.5rem;
+        }
+
+        .dog-age {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .dog-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-button {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .action-button.feed {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .action-button.play {
+            background: linear-gradient(45deg, #feca57, #ff9ff3);
+        }
+
+        .action-button.sleep {
+            background: linear-gradient(45deg, #a8e6cf, #7fcdcd);
+        }
+
+        .action-button.train {
+            background: linear-gradient(45deg, #48dbfb, #0abde3);
+        }
+
+        .cooldown {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .dog-inventory {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .dog-inventory h4 {
+            margin-bottom: 1rem;
+            color: #4ecdc4;
+        }
+
+        .inventory-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .inventory-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .buy-button {
+            background: linear-gradient(45deg, #feca57, #ff9ff3);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .buy-button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(254, 202, 87, 0.4);
+        }
+
+        .buy-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .dog-controls {
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎮 GameHub</div>
+            <div style="text-align: center; color: rgba(255,255,255,0.9); font-size: 0.9rem;">
+                <div style="font-weight: bold;">Built by Wachicode</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">5th ever customer of Wachicode</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+                <li><a href="#" onclick="showPage('games')" class="nav-link">Games</a></li>
+                <li><a href="#" onclick="showPage('donate')" class="nav-link">Donate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <h1>Welcome to GameHub</h1>
+                <p>Your ultimate destination for fun and engaging browser games</p>
+                <a href="#" onclick="showPage('games')" class="cta-button">Start Playing</a>
+            </section>
+            
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Classic Games</h3>
+                    <p>Enjoy timeless favorites like Tic-Tac-Toe and more classic games that never go out of style.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Play</h3>
+                    <p>No downloads required! All games run directly in your browser for instant entertainment.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Play anywhere, anytime! All our games are optimized for both desktop and mobile devices.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Games Page -->
+        <div id="games" class="page">
+            <section class="hero">
+                <h1>Choose Your Game</h1>
+                <p>Select from our collection of entertaining games</p>
+            </section>
+            
+            <div class="games-grid">
+                <div class="game-card" onclick="showGame('tic-tac-toe')">
+                    <div class="game-icon">⭕</div>
+                    <h3>Tic-Tac-Toe</h3>
+                    <p>The classic strategy game. Get three in a row to win!</p>
+                </div>
+                <div class="game-card" onclick="showGame('wordle')">
+                    <div class="game-icon">📝</div>
+                    <h3>Guess the Word</h3>
+                    <p>Guess the 5-letter word in 6 tries! Classic word puzzle fun.</p>
+                </div>
+                <div class="game-card" onclick="showGame('gorilla-jump')">
+                    <div class="game-icon">🦍</div>
+                    <h3>Gorilla Jump</h3>
+                    <p>Help the gorilla jump over obstacles! Press space to jump.</p>
+                </div>
+                <div class="game-card" onclick="showGame('balloon-pop')">
+                    <div class="game-icon">🎈</div>
+                    <h3>Balloon Pop</h3>
+                    <p>Pop balloons to advance through 5 challenging levels!</p>
+                </div>
+                <div class="game-card" onclick="showGame('dog-care')">
+                    <div class="game-icon">🐕</div>
+                    <h3>Puppy Care</h3>
+                    <p>Raise your virtual puppy! Feed, play, and train your furry friend.</p>
+                </div>
+            </div>
+            
+            <!-- Tic-Tac-Toe Game -->
+            <div id="tic-tac-toe-game" class="tic-tac-toe" style="display: none;">
+                <h2>🎮 Tic-Tac-Toe</h2>
+                <div class="game-status" id="game-status">Player X's turn</div>
+                <div class="game-board" id="game-board">
+                    <button class="cell" onclick="makeMove(0)"></button>
+                    <button class="cell" onclick="makeMove(1)"></button>
+                    <button class="cell" onclick="makeMove(2)"></button>
+                    <button class="cell" onclick="makeMove(3)"></button>
+                    <button class="cell" onclick="makeMove(4)"></button>
+                    <button class="cell" onclick="makeMove(5)"></button>
+                    <button class="cell" onclick="makeMove(6)"></button>
+                    <button class="cell" onclick="makeMove(7)"></button>
+                    <button class="cell" onclick="makeMove(8)"></button>
+                </div>
+                <button class="reset-button" onclick="resetGame()">New Game</button>
+                <button class="cta-button" onclick="showGamesGrid()" style="margin-left: 1rem;">Back to Games</button>
+            </div>
+
+            <!-- Wordle Game -->
+            <div id="wordle-game" class="wordle-container" style="display: none;">
+                <h2>📝 Guess the Word</h2>
+                <div class="wordle-status" id="wordle-status">Guess the 5-letter word!</div>
+                <div class="wordle-grid" id="wordle-grid">
+                    <!-- Grid will be generated by JavaScript -->
+                </div>
+                <div class="wordle-keyboard" id="wordle-keyboard">
+                    <!-- Keyboard will be generated by JavaScript -->
+                </div>
+                <div class="wordle-controls">
+                    <button class="reset-button" onclick="resetWordle()">New Word</button>
+                    <button class="cta-button" onclick="showGamesGrid()" style="margin-left: 1rem;">Back to Games</button>
+                </div>
+            </div>
+
+            <!-- Gorilla Jump Game -->
+            <div id="gorilla-jump-game" class="gorilla-game" style="display: none;">
+                <h2>🦍 Gorilla Jump</h2>
+                <div class="gorilla-score" id="gorilla-score">Score: 0</div>
+                <div class="gorilla-instructions">Press SPACE or click to jump over obstacles!</div>
+                <canvas id="gorilla-canvas" class="game-canvas" width="800" height="400"></canvas>
+                <div class="gorilla-controls">
+                    <button class="reset-button" onclick="resetGorillaGame()">Restart Game</button>
+                    <button class="cta-button" onclick="showGamesGrid()" style="margin-left: 1rem;">Back to Games</button>
+                </div>
+            </div>
+
+            <!-- Balloon Pop Game -->
+            <div id="balloon-pop-game" class="balloon-game" style="display: none;">
+                <h2>🎈 Balloon Pop</h2>
+                <div class="balloon-info">
+                    <div class="balloon-level" id="balloon-level">Level 1</div>
+                    <div class="balloon-score" id="balloon-score">Score: 0</div>
+                    <div class="balloon-timer" id="balloon-timer">Time: 30s</div>
+                </div>
+                <div class="balloon-instructions">Click on balloons to pop them! Complete each level before time runs out!</div>
+                <canvas id="balloon-canvas" class="balloon-canvas" width="800" height="500"></canvas>
+                <div class="balloon-controls">
+                    <button class="reset-button" onclick="resetBalloonGame()">Restart Game</button>
+                    <button class="cta-button" onclick="showGamesGrid()" style="margin-left: 1rem;">Back to Games</button>
+                </div>
+            </div>
+
+            <!-- Dog Care Game -->
+            <div id="dog-care-game" class="dog-care-container" style="display: none;">
+                <h2>🐕 Puppy Care</h2>
+                <div class="dog-stats">
+                    <div class="stat-bar">
+                        <span>❤️ Health:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill health" id="health-bar"></div>
+                        </div>
+                        <span id="health-value">100</span>
+                    </div>
+                    <div class="stat-bar">
+                        <span>🍖 Hunger:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill hunger" id="hunger-bar"></div>
+                        </div>
+                        <span id="hunger-value">50</span>
+                    </div>
+                    <div class="stat-bar">
+                        <span>😊 Happiness:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill happiness" id="happiness-bar"></div>
+                        </div>
+                        <span id="happiness-value">75</span>
+                    </div>
+                    <div class="stat-bar">
+                        <span>⚡ Energy:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill energy" id="energy-bar"></div>
+                        </div>
+                        <span id="energy-value">80</span>
+                    </div>
+                    <div class="bladder-cleanliness">
+                        <div class="stat-bar">
+                            <span>🚽 Bladder:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="bladder-bar" style="background: linear-gradient(90deg, #feca57, #ff9ff3);"></div>
+                            </div>
+                            <span id="bladder-value">100</span>
+                        </div>
+                        <div class="stat-bar">
+                            <span>🛁 Clean:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cleanliness-bar" style="background: linear-gradient(90deg, #48dbfb, #0abde3);"></div>
+                            </div>
+                            <span id="cleanliness-value">100</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-info">
+                    <div>
+                        <strong id="current-location">Home</strong>
+                        <div id="location-info">🏠 Home - Click on objects to interact or use movement controls to explore!</div>
+                    </div>
+                    <div class="weather-time">
+                        <div id="weather-display">☀️ Sunny - Perfect weather!</div>
+                        <div id="time-display">🌅 Morning - A new day begins!</div>
+                    </div>
+                </div>
+
+                <div class="dog-world" id="dog-world" onclick="moveDogToClick(event)">
+                    <!-- Indoor Objects -->
+                    <div class="world-object food-bowl" onclick="interactWithObject('food-bowl', event)" title="Food Bowl">🥣</div>
+                    <div class="world-object water-bowl" onclick="interactWithObject('water-bowl', event)" title="Water Bowl">💧</div>
+                    <div class="world-object dog-bed" onclick="interactWithObject('dog-bed', event)" title="Dog Bed">🛏️</div>
+                    <div class="world-object toy-box" onclick="interactWithObject('toy-box', event)" title="Toy Box">🧸</div>
+                    
+                    <!-- Outdoor Objects -->
+                    <div class="world-object tree" onclick="interactWithObject('tree', event)" title="Tree">🌳</div>
+                    <div class="world-object fire-hydrant" onclick="interactWithObject('fire-hydrant', event)" title="Fire Hydrant">🚰</div>
+                    <div class="world-object park-bench" onclick="interactWithObject('park-bench', event)" title="Park Bench">🪑</div>
+                    
+                    <!-- Door -->
+                    <div class="world-object door" onclick="interactWithObject('door', event)" title="Door">🚪</div>
+                    
+                    <!-- Owner -->
+                    <div class="owner" id="owner" onclick="callDog()" title="Click to call your dog!">👤</div>
+                    
+                    <!-- Dog -->
+                    <div class="dog-moveable" id="moveable-dog" onclick="petDog(event)">🐕</div>
+                </div>
+
+                <div class="movement-controls">
+                    <button class="move-btn" onclick="moveDog('up-left')">↖️</button>
+                    <button class="move-btn" onclick="moveDog('up')">⬆️</button>
+                    <button class="move-btn" onclick="moveDog('up-right')">↗️</button>
+                    <button class="move-btn" onclick="moveDog('left')">⬅️</button>
+                    <button class="move-btn" onclick="moveDog('stay')">🏠</button>
+                    <button class="move-btn" onclick="moveDog('right')">➡️</button>
+                    <button class="move-btn" onclick="moveDog('down-left')">↙️</button>
+                    <button class="move-btn" onclick="moveDog('down')">⬇️</button>
+                    <button class="move-btn" onclick="moveDog('down-right')">↘️</button>
+                </div>
+
+                <div class="dog-display">
+                    <div class="dog-status" id="dog-status">Woof! I'm your new puppy! Click around to explore!</div>
+                    <div class="dog-age">
+                        <span>Age: <span id="dog-age">0</span> days</span>
+                        <span>Level: <span id="dog-level">1</span></span>
+                    </div>
+                </div>
+                
+                <div class="dog-actions">
+                    <button class="action-button feed" onclick="feedDog()">
+                        🍖 Feed
+                        <span class="cooldown" id="feed-cooldown"></span>
+                    </button>
+                    <button class="action-button play" onclick="playWithDog()">
+                        🎾 Play
+                        <span class="cooldown" id="play-cooldown"></span>
+                    </button>
+                    <button class="action-button sleep" onclick="dogSleep()">
+                        😴 Sleep
+                        <span class="cooldown" id="sleep-cooldown"></span>
+                    </button>
+                    <button class="action-button train" onclick="trainDog()">
+                        🎓 Train
+                        <span class="cooldown" id="train-cooldown"></span>
+                    </button>
+                </div>
+                
+                <div class="dog-inventory">
+                    <h4>🎒 Inventory</h4>
+                    <div class="inventory-items">
+                        <div class="inventory-item">
+                            <span>🍖 Food: <span id="food-count">5</span></span>
+                            <button onclick="buyFood()" class="buy-button">Buy (10 coins)</button>
+                        </div>
+                        <div class="inventory-item">
+                            <span>🎾 Toys: <span id="toy-count">2</span></span>
+                            <button onclick="buyToy()" class="buy-button">Buy (15 coins)</button>
+                        </div>
+                        <div class="inventory-item">
+                            <span>💰 Coins: <span id="coin-count">50</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dog-controls">
+                    <button class="reset-button" onclick="resetDogGame()">New Puppy</button>
+                    <button class="cta-button" onclick="showGamesGrid()" style="margin-left: 1rem;">Back to Games</button>
+                </div>
+            </div>
+
+            <!-- Level Complete Modal -->
+            <div id="level-complete" class="level-complete">
+                <h3 id="level-complete-title">Level Complete!</h3>
+                <p id="level-complete-text">Great job! Get ready for the next level.</p>
+                <button class="cta-button" onclick="nextLevel()">Next Level</button>
+                <button class="reset-button" onclick="closeLevelModal()" style="margin-left: 1rem;">Back to Games</button>
+            </div>
+
+            <!-- Random Events Notification -->
+            <div id="random-events" class="random-events"></div>
+        </div>
+
+        <!-- Donate Page -->
+        <div id="donate" class="page">
+            <section class="donate-hero">
+                <h1>💝 Support GameHub</h1>
+                <p>Help us keep the games free and add more awesome features! Your support means the world to us and helps us continue creating fun experiences for everyone.</p>
+            </section>
+
+            <div class="demo-notice">
+                ⚠️ DEMO ONLY - This is a sample donation page. No actual payments will be processed.
+            </div>
+
+            <div class="donation-cards">
+                <div class="donation-card">
+                    <div class="donation-amount">$5</div>
+                    <h3>🎮 Gamer Support</h3>
+                    <p>Buy us a coffee and help keep the servers running! Perfect for showing your appreciation.</p>
+                    <button class="donate-button" onclick="showDonationMessage('$5')">Donate $5</button>
+                </div>
+
+                <div class="donation-card">
+                    <div class="donation-amount">$15</div>
+                    <h3>🌟 Premium Supporter</h3>
+                    <p>Help us add new games and features! Your support directly funds development of exciting new content.</p>
+                    <button class="donate-button premium" onclick="showDonationMessage('$15')">Donate $15</button>
+                </div>
+
+                <div class="donation-card">
+                    <div class="donation-amount">$30</div>
+                    <h3>👑 VIP Champion</h3>
+                    <p>Become a champion supporter! Help us build the ultimate gaming platform with advanced features and more games.</p>
+                    <button class="donate-button vip" onclick="showDonationMessage('$30')">Donate $30</button>
+                </div>
+            </div>
+
+            <div class="donation-info">
+                <h3>🎯 Where Your Money Goes</h3>
+                <p>Every donation helps us improve GameHub and create better gaming experiences:</p>
+                <p>• 🖥️ Server hosting and maintenance costs</p>
+                <p>• 🎨 New game development and design</p>
+                <p>• 🔧 Bug fixes and performance improvements</p>
+                <p>• 📱 Mobile optimization and new features</p>
+                <p>• 🎵 Sound effects and enhanced graphics</p>
+
+                <div class="payment-methods">
+                    <div class="payment-method">💳 Credit Card</div>
+                    <div class="payment-method">🅿️ PayPal</div>
+                    <div class="payment-method">🍎 Apple Pay</div>
+                    <div class="payment-method">🤖 Google Pay</div>
+                </div>
+
+                <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+                    All donations are secure and processed through trusted payment providers. 
+                    We never store your payment information.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" onclick="showPage('games')" class="cta-button">Back to Games</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide game if switching pages
+            if (pageId !== 'games') {
+                showGamesGrid();
+            }
+        }
+        
+        function showGame(gameId) {
+            if (gameId === 'tic-tac-toe') {
+                document.querySelector('.games-grid').style.display = 'none';
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('tic-tac-toe-game').style.display = 'block';
+                resetGame();
+            } else if (gameId === 'wordle') {
+                document.querySelector('.games-grid').style.display = 'none';
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('wordle-game').style.display = 'block';
+                initWordle();
+            } else if (gameId === 'gorilla-jump') {
+                document.querySelector('.games-grid').style.display = 'none';
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('gorilla-jump-game').style.display = 'block';
+                initGorillaGame();
+            } else if (gameId === 'balloon-pop') {
+                document.querySelector('.games-grid').style.display = 'none';
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('balloon-pop-game').style.display = 'block';
+                initBalloonGame();
+            } else if (gameId === 'dog-care') {
+                document.querySelector('.games-grid').style.display = 'none';
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('dog-care-game').style.display = 'block';
+                initDogGame();
+            }
+        }
+        
+        function showGamesGrid() {
+            document.querySelector('.games-grid').style.display = 'grid';
+            document.querySelector('.hero').style.display = 'block';
+            document.getElementById('tic-tac-toe-game').style.display = 'none';
+            document.getElementById('wordle-game').style.display = 'none';
+            document.getElementById('gorilla-jump-game').style.display = 'none';
+            document.getElementById('balloon-pop-game').style.display = 'none';
+            document.getElementById('dog-care-game').style.display = 'none';
+        }
+        
+        // Tic-Tac-Toe Game Logic
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+        
+        function makeMove(cellIndex) {
+            if (gameBoard[cellIndex] !== '' || !gameActive) {
+                return;
+            }
+            
+            const cell = document.querySelectorAll('.cell')[cellIndex];
+            
+            gameBoard[cellIndex] = currentPlayer;
+            cell.textContent = currentPlayer;
+            cell.disabled = true;
+            cell.classList.add('placed');
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                cell.classList.remove('placed');
+            }, 600);
+            
+            if (checkWinner()) {
+                setTimeout(() => {
+                    document.getElementById('game-status').textContent = `🎉 Player ${currentPlayer} wins!`;
+                    gameActive = false;
+                    disableAllCells();
+                }, 300);
+                return;
+            }
+            
+            if (gameBoard.every(cell => cell !== '')) {
+                setTimeout(() => {
+                    document.getElementById('game-status').textContent = "🤝 It's a tie!";
+                    gameActive = false;
+                }, 300);
+                return;
+            }
+            
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            setTimeout(() => {
+                document.getElementById('game-status').textContent = `Player ${currentPlayer}'s turn`;
+            }, 300);
+        }
+        
+        function checkWinner() {
+            return winningConditions.some(condition => {
+                return condition.every(index => {
+                    return gameBoard[index] === currentPlayer;
+                });
+            });
+        }
+        
+        function disableAllCells() {
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.disabled = true;
+            });
+        }
+        
+        function resetGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.textContent = '';
+                cell.disabled = false;
+            });
+            
+            document.getElementById('game-status').textContent = "Player X's turn";
+        }
+
+        // Wordle Game Logic
+        const WORDS = [
+            'ABOUT', 'ABOVE', 'ABUSE', 'ACTOR', 'ACUTE', 'ADMIT', 'ADOPT', 'ADULT', 'AFTER', 'AGAIN',
+            'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALERT', 'ALIEN', 'ALIGN', 'ALIKE', 'ALIVE',
+            'ALLOW', 'ALONE', 'ALONG', 'ALTER', 'AMONG', 'ANGER', 'ANGLE', 'ANGRY', 'APART', 'APPLE',
+            'APPLY', 'ARENA', 'ARGUE', 'ARISE', 'ARRAY', 'ASIDE', 'ASSET', 'AUDIO', 'AUDIT', 'AVOID',
+            'AWAKE', 'AWARD', 'AWARE', 'BADLY', 'BAKER', 'BASES', 'BASIC', 'BEACH', 'BEGAN', 'BEGIN',
+            'BEING', 'BELOW', 'BENCH', 'BILLY', 'BIRTH', 'BLACK', 'BLAME', 'BLANK', 'BLAST', 'BLIND',
+            'BLOCK', 'BLOOD', 'BOARD', 'BOAST', 'BOBBY', 'BOOST', 'BOOTH', 'BOUND', 'BRAIN', 'BRAND',
+            'BRASS', 'BRAVE', 'BREAD', 'BREAK', 'BREED', 'BRIEF', 'BRING', 'BROAD', 'BROKE', 'BROWN',
+            'BUILD', 'BUILT', 'BUYER', 'CABLE', 'CALIF', 'CARRY', 'CATCH', 'CAUSE', 'CHAIN', 'CHAIR',
+            'CHAOS', 'CHARM', 'CHART', 'CHASE', 'CHEAP', 'CHECK', 'CHEST', 'CHIEF', 'CHILD', 'CHINA',
+            'CHOSE', 'CIVIL', 'CLAIM', 'CLASS', 'CLEAN', 'CLEAR', 'CLICK', 'CLIMB', 'CLOCK', 'CLOSE',
+            'CLOUD', 'COACH', 'COAST', 'COULD', 'COUNT', 'COURT', 'COVER', 'CRAFT', 'CRASH', 'CRAZY',
+            'CREAM', 'CRIME', 'CROSS', 'CROWD', 'CROWN', 'CRUDE', 'CURVE', 'CYCLE', 'DAILY', 'DANCE',
+            'DATED', 'DEALT', 'DEATH', 'DEBUT', 'DELAY', 'DEPTH', 'DOING', 'DOUBT', 'DOZEN', 'DRAFT',
+            'DRAMA', 'DRANK', 'DRAWN', 'DREAM', 'DRESS', 'DRILL', 'DRINK', 'DRIVE', 'DROVE', 'DYING',
+            'EAGER', 'EARLY', 'EARTH', 'EIGHT', 'ELITE', 'EMPTY', 'ENEMY', 'ENJOY', 'ENTER', 'ENTRY',
+            'EQUAL', 'ERROR', 'EVENT', 'EVERY', 'EXACT', 'EXIST', 'EXTRA', 'FAITH', 'FALSE', 'FAULT',
+            'FIBER', 'FIELD', 'FIFTH', 'FIFTY', 'FIGHT', 'FINAL', 'FIRST', 'FIXED', 'FLASH', 'FLEET',
+            'FLOOR', 'FLUID', 'FOCUS', 'FORCE', 'FORTH', 'FORTY', 'FORUM', 'FOUND', 'FRAME', 'FRANK',
+            'FRAUD', 'FRESH', 'FRONT', 'FRUIT', 'FULLY', 'FUNNY', 'GIANT', 'GIVEN', 'GLASS', 'GLOBE',
+            'GOING', 'GRACE', 'GRADE', 'GRAND', 'GRANT', 'GRASS', 'GRAVE', 'GREAT', 'GREEN', 'GROSS',
+            'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUEST', 'GUIDE', 'HAPPY', 'HARRY', 'HEART', 'HEAVY',
+            'HENCE', 'HENRY', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IDEAL', 'IMAGE', 'INDEX', 'INNER',
+            'INPUT', 'ISSUE', 'JAPAN', 'JIMMY', 'JOINT', 'JONES', 'JUDGE', 'KNOWN', 'LABEL', 'LARGE',
+            'LASER', 'LATER', 'LAUGH', 'LAYER', 'LEARN', 'LEASE', 'LEAST', 'LEAVE', 'LEGAL', 'LEVEL',
+            'LEWIS', 'LIGHT', 'LIMIT', 'LINKS', 'LIVES', 'LOCAL', 'LOOSE', 'LOWER', 'LUCKY', 'LUNCH',
+            'LYING', 'MAGIC', 'MAJOR', 'MAKER', 'MARCH', 'MARIA', 'MATCH', 'MAYBE', 'MAYOR', 'MEANT',
+            'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MINUS', 'MIXED', 'MODEL', 'MONEY', 'MONTH', 'MORAL',
+            'MOTOR', 'MOUNT', 'MOUSE', 'MOUTH', 'MOVED', 'MOVIE', 'MUSIC', 'NEEDS', 'NEVER', 'NEWLY',
+            'NIGHT', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE', 'OCCUR', 'OCEAN', 'OFFER', 'OFTEN',
+            'ORDER', 'OTHER', 'OUGHT', 'PAINT', 'PANEL', 'PAPER', 'PARTY', 'PEACE', 'PETER', 'PHASE',
+            'PHONE', 'PHOTO', 'PIANO', 'PICKED', 'PIECE', 'PILOT', 'PITCH', 'PLACE', 'PLAIN', 'PLANE',
+            'PLANT', 'PLATE', 'POINT', 'POUND', 'POWER', 'PRESS', 'PRICE', 'PRIDE', 'PRIME', 'PRINT',
+            'PRIOR', 'PRIZE', 'PROOF', 'PROUD', 'PROVE', 'QUEEN', 'QUICK', 'QUIET', 'QUITE', 'RADIO',
+            'RAISE', 'RANGE', 'RAPID', 'RATIO', 'REACH', 'READY', 'REALM', 'REBEL', 'REFER', 'RELAX',
+            'REPAY', 'REPLY', 'RIGHT', 'RIGID', 'RIVAL', 'RIVER', 'ROBIN', 'ROGER', 'ROMAN', 'ROUGH',
+            'ROUND', 'ROUTE', 'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE',
+            'SETUP', 'SEVEN', 'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL', 'SHIFT',
+            'SHINE', 'SHIRT', 'SHOCK', 'SHOOT', 'SHORT', 'SHOWN', 'SIGHT', 'SIMON', 'SIXTH', 'SIXTY',
+            'SIZED', 'SKILL', 'SLEEP', 'SLIDE', 'SMALL', 'SMART', 'SMILE', 'SMITH', 'SMOKE', 'SOLID',
+            'SOLVE', 'SORRY', 'SOUND', 'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEED', 'SPEND', 'SPENT',
+            'SPLIT', 'SPOKE', 'SPORT', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START', 'STATE', 'STEAM',
+            'STEEL', 'STEEP', 'STEER', 'STEVE', 'STICK', 'STILL', 'STOCK', 'STONE', 'STOOD', 'STORE',
+            'STORM', 'STORY', 'STRIP', 'STUCK', 'STUDY', 'STUFF', 'STYLE', 'SUGAR', 'SUITE', 'SUPER',
+            'SWEET', 'TABLE', 'TAKEN', 'TASTE', 'TAXES', 'TEACH', 'TEAMS', 'TEETH', 'TERRY', 'TEXAS',
+            'THANK', 'THEFT', 'THEIR', 'THEME', 'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD',
+            'THOSE', 'THREE', 'THREW', 'THROW', 'THUMB', 'TIGHT', 'TIRED', 'TITLE', 'TODAY', 'TOPIC',
+            'TOTAL', 'TOUCH', 'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TREAT', 'TREND', 'TRIAL',
+            'TRIBE', 'TRICK', 'TRIED', 'TRIES', 'TRUCK', 'TRULY', 'TRUNK', 'TRUST', 'TRUTH', 'TWICE',
+            'TWIST', 'TYLER', 'UNDER', 'UNDUE', 'UNION', 'UNITY', 'UNTIL', 'UPPER', 'UPSET', 'URBAN',
+            'USAGE', 'USUAL', 'VALUE', 'VIDEO', 'VIRUS', 'VISIT', 'VITAL', 'VOCAL', 'VOICE', 'WASTE',
+            'WATCH', 'WATER', 'WHEEL', 'WHERE', 'WHICH', 'WHILE', 'WHITE', 'WHOLE', 'WHOSE', 'WOMAN',
+            'WOMEN', 'WORLD', 'WORRY', 'WORSE', 'WORST', 'WORTH', 'WOULD', 'WRITE', 'WRONG', 'WROTE',
+            'YOUNG', 'YOUTH'
+        ];
+
+        let wordleWord = '';
+        let wordleGuesses = [];
+        let currentWordleGuess = '';
+        let currentWordleRow = 0;
+        let wordleGameOver = false;
+        let keyboardState = {};
+
+        function initWordle() {
+            resetWordle();
+            createWordleGrid();
+            createWordleKeyboard();
+            document.addEventListener('keydown', handleWordleKeyPress);
+        }
+
+        function resetWordle() {
+            wordleWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+            wordleGuesses = [];
+            currentWordleGuess = '';
+            currentWordleRow = 0;
+            wordleGameOver = false;
+            keyboardState = {};
+            document.getElementById('wordle-status').textContent = 'Guess the 5-letter word!';
+        }
+
+        function createWordleGrid() {
+            const grid = document.getElementById('wordle-grid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'wordle-row';
+                
+                for (let j = 0; j < 5; j++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'wordle-tile';
+                    tile.id = `tile-${i}-${j}`;
+                    row.appendChild(tile);
+                }
+                
+                grid.appendChild(row);
+            }
+        }
+
+        function createWordleKeyboard() {
+            const keyboard = document.getElementById('wordle-keyboard');
+            keyboard.innerHTML = '';
+            
+            const rows = [
+                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACKSPACE']
+            ];
+            
+            rows.forEach(row => {
+                const keyboardRow = document.createElement('div');
+                keyboardRow.className = 'keyboard-row';
+                
+                row.forEach(key => {
+                    const keyElement = document.createElement('button');
+                    keyElement.className = 'key';
+                    keyElement.textContent = key === 'BACKSPACE' ? '⌫' : key;
+                    
+                    if (key === 'ENTER' || key === 'BACKSPACE') {
+                        keyElement.classList.add('wide');
+                    }
+                    
+                    keyElement.onclick = () => handleWordleKey(key);
+                    keyboardRow.appendChild(keyElement);
+                });
+                
+                keyboard.appendChild(keyboardRow);
+            });
+        }
+
+        function handleWordleKeyPress(event) {
+            if (wordleGameOver) return;
+            
+            const key = event.key.toUpperCase();
+            
+            if (key === 'ENTER') {
+                handleWordleKey('ENTER');
+            } else if (key === 'BACKSPACE') {
+                handleWordleKey('BACKSPACE');
+            } else if (key.match(/[A-Z]/) && key.length === 1) {
+                handleWordleKey(key);
+            }
+        }
+
+        function handleWordleKey(key) {
+            if (wordleGameOver) return;
+            
+            if (key === 'ENTER') {
+                if (currentWordleGuess.length === 5) {
+                    submitWordleGuess();
+                }
+            } else if (key === 'BACKSPACE') {
+                if (currentWordleGuess.length > 0) {
+                    currentWordleGuess = currentWordleGuess.slice(0, -1);
+                    updateWordleDisplay();
+                }
+            } else if (key.match(/[A-Z]/) && currentWordleGuess.length < 5) {
+                currentWordleGuess += key;
+                updateWordleDisplay();
+            }
+        }
+
+        function updateWordleDisplay() {
+            for (let i = 0; i < 5; i++) {
+                const tile = document.getElementById(`tile-${currentWordleRow}-${i}`);
+                tile.textContent = currentWordleGuess[i] || '';
+                
+                if (currentWordleGuess[i]) {
+                    tile.classList.add('filled');
+                } else {
+                    tile.classList.remove('filled');
+                }
+            }
+        }
+
+        function submitWordleGuess() {
+            const guess = currentWordleGuess;
+            wordleGuesses.push(guess);
+            
+            // Check each letter
+            const result = [];
+            const wordArray = wordleWord.split('');
+            const guessArray = guess.split('');
+            
+            // First pass: mark correct positions
+            for (let i = 0; i < 5; i++) {
+                if (guessArray[i] === wordArray[i]) {
+                    result[i] = 'correct';
+                    wordArray[i] = null; // Mark as used
+                }
+            }
+            
+            // Second pass: mark present letters
+            for (let i = 0; i < 5; i++) {
+                if (result[i] !== 'correct') {
+                    const letterIndex = wordArray.indexOf(guessArray[i]);
+                    if (letterIndex !== -1) {
+                        result[i] = 'present';
+                        wordArray[letterIndex] = null; // Mark as used
+                    } else {
+                        result[i] = 'absent';
+                    }
+                }
+            }
+            
+            // Animate tiles
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const tile = document.getElementById(`tile-${currentWordleRow}-${i}`);
+                    tile.classList.add(result[i]);
+                    
+                    // Update keyboard
+                    const letter = guessArray[i];
+                    if (!keyboardState[letter] || 
+                        (keyboardState[letter] === 'absent' && result[i] !== 'absent') ||
+                        (keyboardState[letter] === 'present' && result[i] === 'correct')) {
+                        keyboardState[letter] = result[i];
+                        updateKeyboardKey(letter, result[i]);
+                    }
+                }, i * 100);
+            }
+            
+            // Check win/lose conditions
+            setTimeout(() => {
+                if (guess === wordleWord) {
+                    document.getElementById('wordle-status').textContent = '🎉 Congratulations! You guessed it!';
+                    wordleGameOver = true;
+                } else if (currentWordleRow === 5) {
+                    document.getElementById('wordle-status').textContent = `😔 Game over! The word was ${wordleWord}`;
+                    wordleGameOver = true;
+                } else {
+                    currentWordleRow++;
+                    currentWordleGuess = '';
+                    document.getElementById('wordle-status').textContent = `Guess ${currentWordleRow + 1}/6`;
+                }
+            }, 500);
+        }
+
+        function updateKeyboardKey(letter, state) {
+            const keys = document.querySelectorAll('.key');
+            keys.forEach(key => {
+                if (key.textContent === letter) {
+                    key.classList.remove('correct', 'present', 'absent');
+                    key.classList.add(state);
+                }
+            });
+        }
+
+        // Gorilla Jump Game Logic
+        let gorillaCanvas, gorillaCtx;
+        let gorillaGame = {
+            gorilla: { x: 50, y: 300, width: 40, height: 40, velocityY: 0, jumping: false },
+            obstacles: [],
+            score: 0,
+            gameSpeed: 3,
+            running: false,
+            animationId: null
+        };
+
+        function initGorillaGame() {
+            gorillaCanvas = document.getElementById('gorilla-canvas');
+            gorillaCtx = gorillaCanvas.getContext('2d');
+            
+            // Add event listeners
+            document.addEventListener('keydown', handleGorillaKeyPress);
+            gorillaCanvas.addEventListener('click', gorillaJump);
+            
+            resetGorillaGame();
+        }
+
+        function resetGorillaGame() {
+            gorillaGame.gorilla = { x: 50, y: 300, width: 40, height: 40, velocityY: 0, jumping: false };
+            gorillaGame.obstacles = [];
+            gorillaGame.score = 0;
+            gorillaGame.gameSpeed = 3;
+            gorillaGame.running = true;
+            
+            document.getElementById('gorilla-score').textContent = 'Score: 0';
+            
+            if (gorillaGame.animationId) {
+                cancelAnimationFrame(gorillaGame.animationId);
+            }
+            
+            gameLoop();
+        }
+
+        function handleGorillaKeyPress(event) {
+            if (event.code === 'Space' && document.getElementById('gorilla-jump-game').style.display === 'block') {
+                event.preventDefault();
+                gorillaJump();
+            }
+        }
+
+        function gorillaJump() {
+            if (!gorillaGame.gorilla.jumping && gorillaGame.running) {
+                gorillaGame.gorilla.velocityY = -15;
+                gorillaGame.gorilla.jumping = true;
+            }
+        }
+
+        function updateGorilla() {
+            // Apply gravity
+            gorillaGame.gorilla.velocityY += 0.4;
+            gorillaGame.gorilla.y += gorillaGame.gorilla.velocityY;
+            
+            // Ground collision
+            if (gorillaGame.gorilla.y >= 300) {
+                gorillaGame.gorilla.y = 300;
+                gorillaGame.gorilla.velocityY = 0;
+                gorillaGame.gorilla.jumping = false;
+            }
+        }
+
+        function updateObstacles() {
+            // Add new obstacles
+            if (gorillaGame.obstacles.length === 0 || 
+                gorillaGame.obstacles[gorillaGame.obstacles.length - 1].x < gorillaCanvas.width - 250) {
+                gorillaGame.obstacles.push({
+                    x: gorillaCanvas.width,
+                    y: 320,
+                    width: 20,
+                    height: 60
+                });
+            }
+            
+            // Move obstacles
+            for (let i = gorillaGame.obstacles.length - 1; i >= 0; i--) {
+                gorillaGame.obstacles[i].x -= gorillaGame.gameSpeed;
+                
+                // Remove off-screen obstacles and increase score
+                if (gorillaGame.obstacles[i].x + gorillaGame.obstacles[i].width < 0) {
+                    gorillaGame.obstacles.splice(i, 1);
+                    gorillaGame.score += 10;
+                    document.getElementById('gorilla-score').textContent = `Score: ${gorillaGame.score}`;
+                    
+                    // Increase game speed gradually
+                    if (gorillaGame.score % 100 === 0) {
+                        gorillaGame.gameSpeed += 0.5;
+                    }
+                }
+            }
+        }
+
+        function checkCollisions() {
+            const gorilla = gorillaGame.gorilla;
+            
+            for (let obstacle of gorillaGame.obstacles) {
+                if (gorilla.x < obstacle.x + obstacle.width &&
+                    gorilla.x + gorilla.width > obstacle.x &&
+                    gorilla.y < obstacle.y + obstacle.height &&
+                    gorilla.y + gorilla.height > obstacle.y) {
+                    
+                    // Game over
+                    gorillaGame.running = false;
+                    document.getElementById('gorilla-score').textContent = `Game Over! Final Score: ${gorillaGame.score}`;
+                    return;
+                }
+            }
+        }
+
+        function drawGorilla() {
+            const gorilla = gorillaGame.gorilla;
+            
+            // Draw gorilla body
+            gorillaCtx.fillStyle = '#8B4513';
+            gorillaCtx.fillRect(gorilla.x, gorilla.y, gorilla.width, gorilla.height);
+            
+            // Draw gorilla face
+            gorillaCtx.fillStyle = '#D2691E';
+            gorillaCtx.fillRect(gorilla.x + 5, gorilla.y + 5, 30, 25);
+            
+            // Draw eyes
+            gorillaCtx.fillStyle = '#000';
+            gorillaCtx.fillRect(gorilla.x + 10, gorilla.y + 10, 4, 4);
+            gorillaCtx.fillRect(gorilla.x + 26, gorilla.y + 10, 4, 4);
+            
+            // Draw mouth
+            gorillaCtx.fillRect(gorilla.x + 18, gorilla.y + 20, 4, 2);
+        }
+
+        function drawObstacles() {
+            gorillaCtx.fillStyle = '#654321';
+            
+            for (let obstacle of gorillaGame.obstacles) {
+                // Draw cactus-like obstacle
+                gorillaCtx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                
+                // Add some spikes
+                gorillaCtx.fillStyle = '#228B22';
+                for (let i = 0; i < 3; i++) {
+                    gorillaCtx.fillRect(obstacle.x - 3, obstacle.y + i * 20, 6, 3);
+                    gorillaCtx.fillRect(obstacle.x + obstacle.width - 3, obstacle.y + i * 20, 6, 3);
+                }
+                gorillaCtx.fillStyle = '#654321';
+            }
+        }
+
+        function drawBackground() {
+            // Sky gradient
+            const gradient = gorillaCtx.createLinearGradient(0, 0, 0, gorillaCanvas.height * 0.7);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#98D8E8');
+            gorillaCtx.fillStyle = gradient;
+            gorillaCtx.fillRect(0, 0, gorillaCanvas.width, gorillaCanvas.height * 0.7);
+            
+            // Ground
+            const groundGradient = gorillaCtx.createLinearGradient(0, gorillaCanvas.height * 0.7, 0, gorillaCanvas.height);
+            groundGradient.addColorStop(0, '#90EE90');
+            groundGradient.addColorStop(1, '#228B22');
+            gorillaCtx.fillStyle = groundGradient;
+            gorillaCtx.fillRect(0, gorillaCanvas.height * 0.7, gorillaCanvas.width, gorillaCanvas.height * 0.3);
+            
+            // Add some clouds
+            gorillaCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            gorillaCtx.beginPath();
+            gorillaCtx.arc(150, 80, 25, 0, Math.PI * 2);
+            gorillaCtx.arc(180, 80, 35, 0, Math.PI * 2);
+            gorillaCtx.arc(210, 80, 25, 0, Math.PI * 2);
+            gorillaCtx.fill();
+            
+            gorillaCtx.beginPath();
+            gorillaCtx.arc(500, 60, 20, 0, Math.PI * 2);
+            gorillaCtx.arc(520, 60, 30, 0, Math.PI * 2);
+            gorillaCtx.arc(545, 60, 20, 0, Math.PI * 2);
+            gorillaCtx.fill();
+        }
+
+        function gameLoop() {
+            if (!gorillaGame.running) return;
+            
+            // Clear canvas
+            gorillaCtx.clearRect(0, 0, gorillaCanvas.width, gorillaCanvas.height);
+            
+            // Draw background
+            drawBackground();
+            
+            // Update game objects
+            updateGorilla();
+            updateObstacles();
+            checkCollisions();
+            
+            // Draw game objects
+            drawGorilla();
+            drawObstacles();
+            
+            // Continue game loop
+            if (gorillaGame.running) {
+                gorillaGame.animationId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // Balloon Pop Game Logic
+        let balloonCanvas, balloonCtx;
+        let balloonGame = {
+            balloons: [],
+            score: 0,
+            level: 1,
+            timeLeft: 30,
+            running: false,
+            animationId: null,
+            timerId: null,
+            balloonsToComplete: 10,
+            balloonSpeed: 1,
+            balloonSpawnRate: 0.02,
+            maxBalloons: 8
+        };
+
+        const levelSettings = [
+            { balloons: 10, time: 30, speed: 1, spawnRate: 0.02, maxBalloons: 8 },
+            { balloons: 15, time: 25, speed: 1.5, spawnRate: 0.025, maxBalloons: 10 },
+            { balloons: 20, time: 20, speed: 2, spawnRate: 0.03, maxBalloons: 12 },
+            { balloons: 25, time: 18, speed: 2.5, spawnRate: 0.035, maxBalloons: 15 },
+            { balloons: 30, time: 15, speed: 3, spawnRate: 0.04, maxBalloons: 18 }
+        ];
+
+        function initBalloonGame() {
+            balloonCanvas = document.getElementById('balloon-canvas');
+            balloonCtx = balloonCanvas.getContext('2d');
+            
+            balloonCanvas.addEventListener('click', handleBalloonClick);
+            
+            resetBalloonGame();
+        }
+
+        function resetBalloonGame() {
+            balloonGame.balloons = [];
+            balloonGame.score = 0;
+            balloonGame.level = 1;
+            balloonGame.running = true;
+            
+            const settings = levelSettings[0];
+            balloonGame.timeLeft = settings.time;
+            balloonGame.balloonsToComplete = settings.balloons;
+            balloonGame.balloonSpeed = settings.speed;
+            balloonGame.balloonSpawnRate = settings.spawnRate;
+            balloonGame.maxBalloons = settings.maxBalloons;
+            
+            updateBalloonDisplay();
+            
+            if (balloonGame.animationId) {
+                cancelAnimationFrame(balloonGame.animationId);
+            }
+            if (balloonGame.timerId) {
+                clearInterval(balloonGame.timerId);
+            }
+            
+            startBalloonTimer();
+            balloonGameLoop();
+        }
+
+        function startBalloonTimer() {
+            balloonGame.timerId = setInterval(() => {
+                balloonGame.timeLeft--;
+                updateBalloonDisplay();
+                
+                if (balloonGame.timeLeft <= 0) {
+                    gameOver();
+                }
+            }, 1000);
+        }
+
+        function handleBalloonClick(event) {
+            if (!balloonGame.running) return;
+            
+            const rect = balloonCanvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            for (let i = balloonGame.balloons.length - 1; i >= 0; i--) {
+                const balloon = balloonGame.balloons[i];
+                const distance = Math.sqrt((x - balloon.x) ** 2 + (y - balloon.y) ** 2);
+                
+                if (distance < balloon.radius) {
+                    // Pop the balloon
+                    balloonGame.balloons.splice(i, 1);
+                    balloonGame.score += 10;
+                    
+                    // Create pop effect
+                    createPopEffect(balloon.x, balloon.y, balloon.color);
+                    
+                    updateBalloonDisplay();
+                    
+                    // Check if level complete
+                    if (balloonGame.score >= balloonGame.balloonsToComplete * 10) {
+                        levelComplete();
+                    }
+                    break;
+                }
+            }
+        }
+
+        function createPopEffect(x, y, color) {
+            // Simple pop effect - could be enhanced with particles
+            balloonCtx.save();
+            balloonCtx.globalAlpha = 0.7;
+            balloonCtx.fillStyle = color;
+            balloonCtx.beginPath();
+            balloonCtx.arc(x, y, 30, 0, Math.PI * 2);
+            balloonCtx.fill();
+            balloonCtx.restore();
+        }
+
+        function spawnBalloon() {
+            if (balloonGame.balloons.length < balloonGame.maxBalloons && Math.random() < balloonGame.balloonSpawnRate) {
+                const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+                const balloon = {
+                    x: Math.random() * (balloonCanvas.width - 60) + 30,
+                    y: balloonCanvas.height + 30,
+                    radius: 20 + Math.random() * 15,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: balloonGame.balloonSpeed + Math.random() * 0.5,
+                    wobble: Math.random() * 0.02 + 0.01,
+                    wobbleOffset: Math.random() * Math.PI * 2
+                };
+                balloonGame.balloons.push(balloon);
+            }
+        }
+
+        function updateBalloons() {
+            for (let i = balloonGame.balloons.length - 1; i >= 0; i--) {
+                const balloon = balloonGame.balloons[i];
+                
+                // Move balloon up
+                balloon.y -= balloon.speed;
+                
+                // Add wobble effect
+                balloon.wobbleOffset += balloon.wobble;
+                balloon.x += Math.sin(balloon.wobbleOffset) * 0.5;
+                
+                // Remove balloons that have gone off screen
+                if (balloon.y + balloon.radius < 0) {
+                    balloonGame.balloons.splice(i, 1);
+                }
+            }
+        }
+
+        function drawBalloons() {
+            balloonGame.balloons.forEach(balloon => {
+                // Draw balloon shadow
+                balloonCtx.save();
+                balloonCtx.globalAlpha = 0.3;
+                balloonCtx.fillStyle = '#000';
+                balloonCtx.beginPath();
+                balloonCtx.ellipse(balloon.x + 2, balloon.y + 2, balloon.radius * 0.8, balloon.radius, 0, 0, Math.PI * 2);
+                balloonCtx.fill();
+                balloonCtx.restore();
+                
+                // Draw balloon
+                const gradient = balloonCtx.createRadialGradient(
+                    balloon.x - balloon.radius * 0.3, balloon.y - balloon.radius * 0.3, 0,
+                    balloon.x, balloon.y, balloon.radius
+                );
+                gradient.addColorStop(0, balloon.color);
+                gradient.addColorStop(0.7, balloon.color);
+                gradient.addColorStop(1, '#000');
+                
+                balloonCtx.fillStyle = gradient;
+                balloonCtx.beginPath();
+                balloonCtx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
+                balloonCtx.fill();
+                
+                // Draw balloon highlight
+                balloonCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                balloonCtx.beginPath();
+                balloonCtx.arc(balloon.x - balloon.radius * 0.3, balloon.y - balloon.radius * 0.3, balloon.radius * 0.3, 0, Math.PI * 2);
+                balloonCtx.fill();
+                
+                // Draw balloon string
+                balloonCtx.strokeStyle = '#8B4513';
+                balloonCtx.lineWidth = 2;
+                balloonCtx.beginPath();
+                balloonCtx.moveTo(balloon.x, balloon.y + balloon.radius);
+                balloonCtx.lineTo(balloon.x + Math.sin(balloon.wobbleOffset) * 3, balloon.y + balloon.radius + 30);
+                balloonCtx.stroke();
+            });
+        }
+
+        function drawBalloonBackground() {
+            // Sky gradient
+            const gradient = balloonCtx.createLinearGradient(0, 0, 0, balloonCanvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(0.5, '#98D8E8');
+            gradient.addColorStop(1, '#B0E0E6');
+            balloonCtx.fillStyle = gradient;
+            balloonCtx.fillRect(0, 0, balloonCanvas.width, balloonCanvas.height);
+            
+            // Add some clouds
+            balloonCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            balloonCtx.beginPath();
+            balloonCtx.arc(150, 100, 30, 0, Math.PI * 2);
+            balloonCtx.arc(180, 100, 40, 0, Math.PI * 2);
+            balloonCtx.arc(210, 100, 30, 0, Math.PI * 2);
+            balloonCtx.fill();
+            
+            balloonCtx.beginPath();
+            balloonCtx.arc(600, 80, 25, 0, Math.PI * 2);
+            balloonCtx.arc(625, 80, 35, 0, Math.PI * 2);
+            balloonCtx.arc(650, 80, 25, 0, Math.PI * 2);
+            balloonCtx.fill();
+        }
+
+        function updateBalloonDisplay() {
+            document.getElementById('balloon-level').textContent = `Level ${balloonGame.level}`;
+            document.getElementById('balloon-score').textContent = `Score: ${balloonGame.score}`;
+            document.getElementById('balloon-timer').textContent = `Time: ${balloonGame.timeLeft}s`;
+        }
+
+        function levelComplete() {
+            balloonGame.running = false;
+            clearInterval(balloonGame.timerId);
+            
+            if (balloonGame.level >= 5) {
+                // Game complete
+                document.getElementById('level-complete-title').textContent = '🎉 Game Complete!';
+                document.getElementById('level-complete-text').textContent = `Congratulations! You completed all 5 levels with a score of ${balloonGame.score}!`;
+                document.querySelector('#level-complete .cta-button').textContent = 'Play Again';
+                document.querySelector('#level-complete .cta-button').onclick = resetBalloonGame;
+            } else {
+                // Next level
+                document.getElementById('level-complete-title').textContent = `Level ${balloonGame.level} Complete!`;
+                document.getElementById('level-complete-text').textContent = `Great job! Score: ${balloonGame.score}. Ready for level ${balloonGame.level + 1}?`;
+                document.querySelector('#level-complete .cta-button').textContent = 'Next Level';
+                document.querySelector('#level-complete .cta-button').onclick = nextLevel;
+            }
+            
+            document.getElementById('level-complete').style.display = 'block';
+        }
+
+        function nextLevel() {
+            document.getElementById('level-complete').style.display = 'none';
+            
+            balloonGame.level++;
+            const settings = levelSettings[balloonGame.level - 1];
+            
+            balloonGame.timeLeft = settings.time;
+            balloonGame.balloonsToComplete = settings.balloons;
+            balloonGame.balloonSpeed = settings.speed;
+            balloonGame.balloonSpawnRate = settings.spawnRate;
+            balloonGame.maxBalloons = settings.maxBalloons;
+            balloonGame.balloons = [];
+            balloonGame.running = true;
+            
+            updateBalloonDisplay();
+            startBalloonTimer();
+            balloonGameLoop();
+        }
+
+        function gameOver() {
+            balloonGame.running = false;
+            clearInterval(balloonGame.timerId);
+            
+            document.getElementById('level-complete-title').textContent = '⏰ Time\'s Up!';
+            document.getElementById('level-complete-text').textContent = `Game Over! You reached level ${balloonGame.level} with a score of ${balloonGame.score}.`;
+            document.querySelector('#level-complete .cta-button').textContent = 'Try Again';
+            document.querySelector('#level-complete .cta-button').onclick = resetBalloonGame;
+            document.getElementById('level-complete').style.display = 'block';
+        }
+
+        function closeLevelModal() {
+            document.getElementById('level-complete').style.display = 'none';
+            showGamesGrid();
+        }
+
+        // Donation functionality
+        function showDonationMessage(amount) {
+            alert(`Thank you for wanting to donate ${amount}! 💝\n\nThis is a demo page - no actual payment will be processed.\n\nIn a real application, this would redirect to a secure payment processor like Stripe or PayPal.`);
+        }
+
+        function balloonGameLoop() {
+            if (!balloonGame.running) return;
+            
+            // Clear canvas
+            balloonCtx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
+            
+            // Draw background
+            drawBalloonBackground();
+            
+            // Update game objects
+            spawnBalloon();
+            updateBalloons();
+            
+            // Draw game objects
+            drawBalloons();
+            
+            // Continue game loop
+            if (balloonGame.running) {
+                balloonGame.animationId = requestAnimationFrame(balloonGameLoop);
+            }
+        }
+
+        // Dog Care Game Logic
+        let dogStats = {
+            health: 100,
+            hunger: 50,
+            happiness: 75,
+            energy: 80,
+            bladder: 100,
+            cleanliness: 100,
+            age: 0,
+            level: 1,
+            coins: 50,
+            food: 5,
+            toys: 2
+        };
+
+        let dogCooldowns = {
+            feed: 0,
+            play: 0,
+            sleep: 0,
+            train: 0
+        };
+
+        let dogGameTimer = null;
+        let dogPosition = { x: 400, y: 100 };
+        let currentLocation = 'home'; // 'home' or 'outside'
+        let currentWeather = 'sunny';
+        let timeOfDay = 'morning';
+        let weatherTimer = 0;
+        let timeTimer = 0;
+
+        let dogMessages = {
+            happy: ["Woof! I'm so happy!", "This is the best day ever!", "I love you so much!", "Life is amazing!"],
+            sad: ["I'm feeling a bit down...", "Could use some attention...", "Feeling lonely...", "Need some love..."],
+            hungry: ["I'm getting hungry!", "My tummy is rumbling!", "Food would be nice!", "When's dinner?"],
+            tired: ["I'm getting sleepy...", "Need to rest soon...", "Feeling drowsy...", "Time for a nap?"],
+            sick: ["Not feeling well...", "Need some care...", "Feeling under the weather...", "Could use help..."],
+            playing: ["This is so fun!", "I love playing!", "Woof woof!", "Best game ever!"],
+            sleeping: ["Zzz... having sweet dreams...", "Sleeping peacefully...", "Dreaming of treats...", "Zzz..."],
+            training: ["I'm learning so much!", "This is challenging!", "Getting smarter!", "I can do this!"],
+            walking: ["I love exploring!", "Adventure time!", "So many smells!", "This is exciting!"],
+            bathroom: ["Ahh, much better!", "Thanks for taking me out!", "Perfect timing!", "Relief!"],
+            dirty: ["I need a bath...", "Getting a bit smelly...", "Could use some cleaning...", "Feeling grimy..."],
+            weather: {
+                sunny: ["Perfect weather for playing!", "I love the sunshine!", "Such a beautiful day!"],
+                rainy: ["I don't like getting wet...", "Can we go inside?", "This rain is no fun..."],
+                stormy: ["The thunder is scary!", "I want to hide!", "This storm is frightening!"],
+                snowy: ["Snow is so fun to play in!", "I love the cold!", "Winter wonderland!"],
+                cloudy: ["Nice and cool today!", "Perfect walking weather!", "Comfortable outside!"]
+            }
+        };
+
+        const weatherTypes = [
+            { name: 'sunny', icon: '☀️', description: 'Perfect weather!', effects: { happiness: 2, energy: 1 } },
+            { name: 'rainy', icon: '🌧️', description: 'Light rain falling', effects: { happiness: -1, cleanliness: -3 } },
+            { name: 'stormy', icon: '⛈️', description: 'Thunderstorm!', effects: { happiness: -3, energy: -2 } },
+            { name: 'snowy', icon: '❄️', description: 'Snow is falling', effects: { happiness: 1, cleanliness: -1 } },
+            { name: 'cloudy', icon: '☁️', description: 'Overcast skies', effects: { energy: 1 } }
+        ];
+
+        const timeOfDayTypes = [
+            { name: 'morning', icon: '🌅', description: 'A new day begins!' },
+            { name: 'afternoon', icon: '☀️', description: 'Bright afternoon!' },
+            { name: 'evening', icon: '🌇', description: 'Golden hour!' },
+            { name: 'night', icon: '🌙', description: 'Time to rest!' }
+        ];
+
+        const randomEvents = [
+            { text: "🐿️ A squirrel ran by! Your dog got excited!", chance: 0.1, effect: { happiness: 5, energy: -3 } },
+            { text: "🐕 Met another friendly dog at the park!", chance: 0.08, effect: { happiness: 8, energy: -2 } },
+            { text: "🦴 Found a buried bone! Lucky day!", chance: 0.05, effect: { happiness: 10, coins: 5 } },
+            { text: "💧 Splashed in a puddle! Got a bit dirty but had fun!", chance: 0.12, effect: { happiness: 6, cleanliness: -8 } },
+            { text: "🌸 Stopped to smell the flowers. So peaceful!", chance: 0.15, effect: { happiness: 4, energy: 2 } },
+            { text: "🚗 A car honked nearby. Startled your dog!", chance: 0.07, effect: { happiness: -3, energy: -1 } },
+            { text: "👶 A child wanted to pet your dog! Made friends!", chance: 0.09, effect: { happiness: 7, coins: 2 } },
+            { text: "🍃 Chased some falling leaves around!", chance: 0.11, effect: { happiness: 5, energy: -4 } }
+        ];
+
+        function initDogGame() {
+            resetDogGame();
+            startDogGameTimer();
+        }
+
+        function resetDogGame() {
+            dogStats = {
+                health: 100,
+                hunger: 50,
+                happiness: 75,
+                energy: 80,
+                bladder: 100,
+                cleanliness: 100,
+                age: 0,
+                level: 1,
+                coins: 50,
+                food: 5,
+                toys: 2
+            };
+
+            dogCooldowns = {
+                feed: 0,
+                play: 0,
+                sleep: 0,
+                train: 0
+            };
+
+            dogPosition = { x: 400, y: 100 };
+            currentLocation = 'home';
+            currentWeather = 'sunny';
+            timeOfDay = 'morning';
+            weatherTimer = 0;
+            timeTimer = 0;
+
+            updateDogDisplay();
+            updateWeatherDisplay();
+            updateLocationDisplay();
+            updateDogStatus("Woof! I'm your new puppy! Click around to explore!");
+            
+            if (dogGameTimer) {
+                clearInterval(dogGameTimer);
+            }
+            startDogGameTimer();
+        }
+
+        function moveDog(direction) {
+            const moveDistance = 30;
+            const dog = document.getElementById('moveable-dog');
+            const world = document.getElementById('dog-world');
+            const worldRect = world.getBoundingClientRect();
+            
+            let newX = dogPosition.x;
+            let newY = dogPosition.y;
+            
+            switch(direction) {
+                case 'up':
+                    newY = Math.max(20, dogPosition.y - moveDistance);
+                    break;
+                case 'down':
+                    newY = Math.min(350, dogPosition.y + moveDistance);
+                    break;
+                case 'left':
+                    newX = Math.max(20, dogPosition.x - moveDistance);
+                    break;
+                case 'right':
+                    newX = Math.min(worldRect.width - 60, dogPosition.x + moveDistance);
+                    break;
+                case 'up-left':
+                    newY = Math.max(20, dogPosition.y - moveDistance);
+                    newX = Math.max(20, dogPosition.x - moveDistance);
+                    break;
+                case 'up-right':
+                    newY = Math.max(20, dogPosition.y - moveDistance);
+                    newX = Math.min(worldRect.width - 60, dogPosition.x + moveDistance);
+                    break;
+                case 'down-left':
+                    newY = Math.min(350, dogPosition.y + moveDistance);
+                    newX = Math.max(20, dogPosition.x - moveDistance);
+                    break;
+                case 'down-right':
+                    newY = Math.min(350, dogPosition.y + moveDistance);
+                    newX = Math.min(worldRect.width - 60, dogPosition.x + moveDistance);
+                    break;
+                case 'stay':
+                    updateDogStatus("I'm staying right here!");
+                    return;
+            }
+            
+            dogPosition.x = newX;
+            dogPosition.y = newY;
+            
+            dog.style.left = newX + 'px';
+            dog.style.bottom = newY + 'px';
+            
+            dog.classList.add('walking');
+            setTimeout(() => {
+                dog.classList.remove('walking');
+            }, 500);
+            
+            dogStats.energy = Math.max(0, dogStats.energy - 2);
+            dogStats.happiness = Math.min(100, dogStats.happiness + 1);
+            
+            updateDogDisplay();
+            updateDogStatus(getRandomMessage('walking'));
+            checkRandomEvents();
+        }
+
+        function moveDogToClick(event) {
+            event.stopPropagation();
+            const world = document.getElementById('dog-world');
+            const rect = world.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const clickY = rect.height - (event.clientY - rect.top);
+            
+            const dog = document.getElementById('moveable-dog');
+            
+            dogPosition.x = Math.max(20, Math.min(rect.width - 60, clickX - 30));
+            dogPosition.y = Math.max(20, Math.min(350, clickY - 30));
+            
+            dog.style.left = dogPosition.x + 'px';
+            dog.style.bottom = dogPosition.y + 'px';
+            
+            dog.classList.add('walking');
+            setTimeout(() => {
+                dog.classList.remove('walking');
+            }, 500);
+            
+            dogStats.energy = Math.max(0, dogStats.energy - 3);
+            dogStats.happiness = Math.min(100, dogStats.happiness + 2);
+            
+            updateDogDisplay();
+            updateDogStatus("Running to explore!");
+            checkRandomEvents();
+        }
+
+        function interactWithObject(objectType, event) {
+            event.stopPropagation();
+            
+            switch(objectType) {
+                case 'food-bowl':
+                    if (dogStats.food > 0) {
+                        feedDog();
+                    } else {
+                        updateDogStatus("The food bowl is empty! Need to buy more food.");
+                    }
+                    break;
+                case 'water-bowl':
+                    dogStats.hunger = Math.min(100, dogStats.hunger + 15);
+                    dogStats.health = Math.min(100, dogStats.health + 5);
+                    updateDogStatus("Refreshing water! *slurp slurp*");
+                    break;
+                case 'dog-bed':
+                    dogSleep();
+                    break;
+                case 'toy-box':
+                    if (dogStats.toys > 0) {
+                        playWithDog();
+                    } else {
+                        updateDogStatus("No toys left! Need to buy more toys.");
+                    }
+                    break;
+                case 'door':
+                    toggleLocation();
+                    break;
+                case 'tree':
+                    if (currentLocation === 'outside') {
+                        dogStats.happiness = Math.min(100, dogStats.happiness + 10);
+                        dogStats.bladder = Math.max(0, dogStats.bladder - 30);
+                        updateDogStatus(getRandomMessage('bathroom'));
+                        checkRandomEvents();
+                    }
+                    break;
+                case 'fire-hydrant':
+                    if (currentLocation === 'outside') {
+                        dogStats.bladder = Math.max(0, dogStats.bladder - 50);
+                        dogStats.happiness = Math.min(100, dogStats.happiness + 5);
+                        updateDogStatus("Perfect spot! *relieved*");
+                    }
+                    break;
+                case 'park-bench':
+                    if (currentLocation === 'outside') {
+                        dogStats.energy = Math.min(100, dogStats.energy + 15);
+                        dogStats.happiness = Math.min(100, dogStats.happiness + 8);
+                        updateDogStatus("Nice rest in the park!");
+                        checkRandomEvents();
+                    }
+                    break;
+            }
+            
+            updateDogDisplay();
+        }
+
+        function toggleLocation() {
+            if (currentLocation === 'home') {
+                currentLocation = 'outside';
+                document.querySelector('.food-bowl').style.display = 'none';
+                document.querySelector('.water-bowl').style.display = 'none';
+                document.querySelector('.dog-bed').style.display = 'none';
+                document.querySelector('.toy-box').style.display = 'none';
+                
+                document.querySelector('.tree').style.display = 'block';
+                document.querySelector('.fire-hydrant').style.display = 'block';
+                document.querySelector('.park-bench').style.display = 'block';
+                
+                document.getElementById('dog-world').style.background = 
+                    'linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #228B22 100%)';
+                
+                updateDogStatus("We're outside! So many things to explore!");
+                applyWeatherEffects();
+            } else {
+                currentLocation = 'home';
+                document.querySelector('.food-bowl').style.display = 'block';
+                document.querySelector('.water-bowl').style.display = 'block';
+                document.querySelector('.dog-bed').style.display = 'block';
+                document.querySelector('.toy-box').style.display = 'block';
+                
+                document.querySelector('.tree').style.display = 'none';
+                document.querySelector('.fire-hydrant').style.display = 'none';
+                document.querySelector('.park-bench').style.display = 'none';
+                
+                document.getElementById('dog-world').style.background = 
+                    'linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #90EE90 60%, #228B22 100%)';
+                
+                updateDogStatus("Back home! Safe and cozy.");
+            }
+            
+            updateLocationDisplay();
+        }
+
+        function checkRandomEvents() {
+            if (currentLocation === 'outside') {
+                randomEvents.forEach(event => {
+                    if (Math.random() < event.chance) {
+                        showRandomEvent(event);
+                    }
+                });
+            }
+        }
+
+        function showRandomEvent(event) {
+            const eventDiv = document.getElementById('random-events');
+            eventDiv.textContent = event.text;
+            eventDiv.classList.add('show');
+            
+            Object.keys(event.effect).forEach(stat => {
+                if (dogStats.hasOwnProperty(stat)) {
+                    dogStats[stat] = Math.max(0, Math.min(100, dogStats[stat] + event.effect[stat]));
+                }
+            });
+            
+            updateDogDisplay();
+            
+            setTimeout(() => {
+                eventDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        function updateWeatherDisplay() {
+            const weather = weatherTypes.find(w => w.name === currentWeather);
+            const time = timeOfDayTypes.find(t => t.name === timeOfDay);
+            
+            document.getElementById('weather-display').textContent = 
+                `${weather.icon} ${weather.name.charAt(0).toUpperCase() + weather.name.slice(1)} - ${weather.description}`;
+            document.getElementById('time-display').textContent = 
+                `${time.icon} ${time.description}`;
+        }
+
+        function updateLocationDisplay() {
+            document.getElementById('current-location').textContent = 
+                currentLocation === 'home' ? 'Home' : 'Outside';
+            
+            const locationInfo = document.getElementById('location-info');
+            if (currentLocation === 'home') {
+                locationInfo.textContent = '🏠 Home - Click on objects to interact or use movement controls to explore!';
+            } else {
+                locationInfo.textContent = '🌳 Outside - Fresh air and adventure! Watch out for random events!';
+            }
+        }
+
+        function applyWeatherEffects() {
+            if (currentLocation === 'outside') {
+                const weather = weatherTypes.find(w => w.name === currentWeather);
+                Object.keys(weather.effects).forEach(stat => {
+                    if (dogStats.hasOwnProperty(stat)) {
+                        dogStats[stat] = Math.max(0, Math.min(100, dogStats[stat] + weather.effects[stat]));
+                    }
+                });
+                
+                if (dogMessages.weather[currentWeather]) {
+                    const messages = dogMessages.weather[currentWeather];
+                    updateDogStatus(messages[Math.floor(Math.random() * messages.length)]);
+                }
+            }
+        }
+
+        function startDogGameTimer() {
+            dogGameTimer = setInterval(() => {
+                // Decrease stats over time
+                dogStats.hunger = Math.max(0, dogStats.hunger - 1);
+                dogStats.happiness = Math.max(0, dogStats.happiness - 0.5);
+                dogStats.energy = Math.max(0, dogStats.energy - 0.3);
+                dogStats.bladder = Math.max(0, dogStats.bladder - 0.8);
+                dogStats.cleanliness = Math.max(0, dogStats.cleanliness - 0.2);
+                
+                // Health decreases if other stats are low
+                if (dogStats.hunger < 20 || dogStats.happiness < 20 || dogStats.bladder < 10) {
+                    dogStats.health = Math.max(0, dogStats.health - 1);
+                }
+                
+                // Bladder accidents
+                if (dogStats.bladder <= 0 && currentLocation === 'home') {
+                    dogStats.cleanliness = Math.max(0, dogStats.cleanliness - 20);
+                    dogStats.happiness = Math.max(0, dogStats.happiness - 15);
+                    updateDogStatus("Oops! I had an accident inside... 😳");
+                }
+                
+                // Age the dog
+                dogStats.age += 0.1;
+                
+                // Level up based on age
+                const newLevel = Math.floor(dogStats.age / 10) + 1;
+                if (newLevel > dogStats.level) {
+                    dogStats.level = newLevel;
+                    dogStats.coins += 20;
+                    updateDogStatus(`Level up! Now level ${dogStats.level}! 🎉`);
+                }
+                
+                // Update cooldowns
+                Object.keys(dogCooldowns).forEach(action => {
+                    if (dogCooldowns[action] > 0) {
+                        dogCooldowns[action]--;
+                        updateCooldownDisplay(action);
+                    }
+                });
+                
+                // Weather and time changes
+                weatherTimer++;
+                timeTimer++;
+                
+                if (weatherTimer >= 30) { // Change weather every minute
+                    changeWeather();
+                    weatherTimer = 0;
+                }
+                
+                if (timeTimer >= 20) { // Change time every 40 seconds
+                    changeTimeOfDay();
+                    timeTimer = 0;
+                }
+                
+                updateDogDisplay();
+                updateDogMood();
+            }, 2000); // Update every 2 seconds
+        }
+
+        function changeWeather() {
+            const newWeather = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
+            currentWeather = newWeather.name;
+            updateWeatherDisplay();
+            
+            if (currentLocation === 'outside') {
+                applyWeatherEffects();
+            }
+        }
+
+        function changeTimeOfDay() {
+            const currentIndex = timeOfDayTypes.findIndex(t => t.name === timeOfDay);
+            const nextIndex = (currentIndex + 1) % timeOfDayTypes.length;
+            timeOfDay = timeOfDayTypes[nextIndex].name;
+            updateWeatherDisplay();
+            
+            // Night time effects
+            if (timeOfDay === 'night') {
+                dogStats.energy = Math.max(0, dogStats.energy - 5);
+                if (Math.random() < 0.3) {
+                    updateDogStatus("It's getting dark... I'm feeling sleepy.");
+                }
+            }
+        }
+
+        function feedDog() {
+            if (dogCooldowns.feed > 0 || dogStats.food <= 0) return;
+            
+            dogStats.food--;
+            dogStats.hunger = Math.min(100, dogStats.hunger + 30);
+            dogStats.happiness = Math.min(100, dogStats.happiness + 10);
+            dogCooldowns.feed = 5;
+            
+            animateDog('happy');
+            updateDogStatus(getRandomMessage('happy'));
+            updateDogDisplay();
+            updateCooldownDisplay('feed');
+        }
+
+        function playWithDog() {
+            if (dogCooldowns.play > 0 || dogStats.toys <= 0 || dogStats.energy < 20) return;
+            
+            dogStats.toys--;
+            dogStats.happiness = Math.min(100, dogStats.happiness + 25);
+            dogStats.energy = Math.max(0, dogStats.energy - 15);
+            dogStats.hunger = Math.max(0, dogStats.hunger - 5);
+            dogCooldowns.play = 8;
+            
+            animateDog('playing');
+            updateDogStatus(getRandomMessage('playing'));
+            updateDogDisplay();
+            updateCooldownDisplay('play');
+        }
+
+        function dogSleep() {
+            if (dogCooldowns.sleep > 0) return;
+            
+            dogStats.energy = Math.min(100, dogStats.energy + 40);
+            dogStats.health = Math.min(100, dogStats.health + 10);
+            dogCooldowns.sleep = 10;
+            
+            animateDog('sleeping');
+            updateDogStatus(getRandomMessage('sleeping'));
+            updateDogDisplay();
+            updateCooldownDisplay('sleep');
+        }
+
+        function trainDog() {
+            if (dogCooldowns.train > 0 || dogStats.energy < 30) return;
+            
+            dogStats.energy = Math.max(0, dogStats.energy - 25);
+            dogStats.happiness = Math.min(100, dogStats.happiness + 15);
+            dogStats.coins += 5;
+            dogCooldowns.train = 12;
+            
+            animateDog('happy');
+            updateDogStatus(getRandomMessage('training'));
+            updateDogDisplay();
+            updateCooldownDisplay('train');
+        }
+
+        function buyFood() {
+            if (dogStats.coins >= 10) {
+                dogStats.coins -= 10;
+                dogStats.food += 3;
+                updateDogDisplay();
+                updateDogStatus("Bought some delicious food! 🍖");
+            } else {
+                updateDogStatus("Not enough coins for food!");
+            }
+        }
+
+        function buyToy() {
+            if (dogStats.coins >= 15) {
+                dogStats.coins -= 15;
+                dogStats.toys += 2;
+                updateDogDisplay();
+                updateDogStatus("Got some new toys! 🎾");
+            } else {
+                updateDogStatus("Not enough coins for toys!");
+            }
+        }
+
+        function updateDogDisplay() {
+            // Update progress bars
+            document.getElementById('health-bar').style.width = dogStats.health + '%';
+            document.getElementById('hunger-bar').style.width = dogStats.hunger + '%';
+            document.getElementById('happiness-bar').style.width = dogStats.happiness + '%';
+            document.getElementById('energy-bar').style.width = dogStats.energy + '%';
+            document.getElementById('bladder-bar').style.width = dogStats.bladder + '%';
+            document.getElementById('cleanliness-bar').style.width = dogStats.cleanliness + '%';
+            
+            // Update values
+            document.getElementById('health-value').textContent = Math.round(dogStats.health);
+            document.getElementById('hunger-value').textContent = Math.round(dogStats.hunger);
+            document.getElementById('happiness-value').textContent = Math.round(dogStats.happiness);
+            document.getElementById('energy-value').textContent = Math.round(dogStats.energy);
+            document.getElementById('bladder-value').textContent = Math.round(dogStats.bladder);
+            document.getElementById('cleanliness-value').textContent = Math.round(dogStats.cleanliness);
+            
+            // Update age and level
+            document.getElementById('dog-age').textContent = Math.floor(dogStats.age);
+            document.getElementById('dog-level').textContent = dogStats.level;
+            
+            // Update inventory
+            document.getElementById('food-count').textContent = dogStats.food;
+            document.getElementById('toy-count').textContent = dogStats.toys;
+            document.getElementById('coin-count').textContent = dogStats.coins;
+            
+            // Update button states
+            updateButtonStates();
+        }
+
+        function updateButtonStates() {
+            // Feed button
+            const feedBtn = document.querySelector('.action-button.feed');
+            feedBtn.disabled = dogCooldowns.feed > 0 || dogStats.food <= 0;
+            
+            // Play button
+            const playBtn = document.querySelector('.action-button.play');
+            playBtn.disabled = dogCooldowns.play > 0 || dogStats.toys <= 0 || dogStats.energy < 20;
+            
+            // Sleep button
+            const sleepBtn = document.querySelector('.action-button.sleep');
+            sleepBtn.disabled = dogCooldowns.sleep > 0;
+            
+            // Train button
+            const trainBtn = document.querySelector('.action-button.train');
+            trainBtn.disabled = dogCooldowns.train > 0 || dogStats.energy < 30;
+            
+            // Buy buttons
+            document.querySelector('button[onclick="buyFood()"]').disabled = dogStats.coins < 10;
+            document.querySelector('button[onclick="buyToy()"]').disabled = dogStats.coins < 15;
+        }
+
+        function updateCooldownDisplay(action) {
+            const cooldownElement = document.getElementById(`${action}-cooldown`);
+            if (dogCooldowns[action] > 0) {
+                cooldownElement.textContent = dogCooldowns[action];
+                cooldownElement.style.display = 'block';
+            } else {
+                cooldownElement.style.display = 'none';
+            }
+        }
+
+        function animateDog(mood) {
+            const dog = document.getElementById('dog');
+            dog.className = 'dog ' + mood;
+            
+            setTimeout(() => {
+                dog.className = 'dog';
+            }, 2000);
+        }
+
+        function updateDogStatus(message) {
+            document.getElementById('dog-status').textContent = message;
+        }
+
+        function updateDogMood() {
+            let message = "";
+            let mood = "";
+            const dog = document.getElementById('moveable-dog');
+            
+            // Priority system for messages
+            if (dogStats.health < 30) {
+                message = getRandomMessage('sick');
+                mood = 'sad';
+            } else if (dogStats.bladder < 15 && currentLocation === 'home') {
+                message = "I really need to go outside! 🚽";
+                mood = 'sad';
+            } else if (dogStats.cleanliness < 30) {
+                message = getRandomMessage('dirty');
+                mood = 'sad';
+            } else if (dogStats.hunger < 20) {
+                message = getRandomMessage('hungry');
+                mood = 'sad';
+            } else if (dogStats.energy < 20) {
+                message = getRandomMessage('tired');
+                mood = 'sad';
+            } else if (dogStats.happiness < 30) {
+                message = getRandomMessage('sad');
+                mood = 'sad';
+            } else if (dogStats.happiness > 80 && dogStats.health > 70) {
+                message = getRandomMessage('happy');
+                mood = 'happy';
+            }
+            
+            if (message) {
+                updateDogStatus(message);
+                if (mood && dog) {
+                    dog.className = 'dog-moveable ' + mood;
+                    setTimeout(() => {
+                        dog.className = 'dog-moveable';
+                    }, 2000);
+                }
+            }
+        }
+
+        function getRandomMessage(category) {
+            const messages = dogMessages[category];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        function callDog() {
+            const owner = document.getElementById('owner');
+            const dog = document.getElementById('moveable-dog');
+            
+            owner.classList.add('calling');
+            setTimeout(() => {
+                owner.classList.remove('calling');
+            }, 1000);
+            
+            // Move dog towards owner
+            const ownerRect = owner.getBoundingClientRect();
+            const worldRect = document.getElementById('dog-world').getBoundingClientRect();
+            
+            dogPosition.x = Math.max(20, ownerRect.left - worldRect.left - 60);
+            dogPosition.y = Math.max(20, worldRect.height - (ownerRect.top - worldRect.top) - 60);
+            
+            dog.style.left = dogPosition.x + 'px';
+            dog.style.bottom = dogPosition.y + 'px';
+            
+            dog.classList.add('walking');
+            setTimeout(() => {
+                dog.classList.remove('walking');
+            }, 1000);
+            
+            dogStats.happiness = Math.min(100, dogStats.happiness + 15);
+            dogStats.energy = Math.max(0, dogStats.energy - 5);
+            
+            updateDogDisplay();
+            updateDogStatus("Coming to you! I love when you call me! 🐕💕");
+        }
+
+        function petDog(event) {
+            event.stopPropagation();
+            const dog = document.getElementById('moveable-dog');
+                
+            dog.classList.add('happy');
+            setTimeout(() => {
+                dog.classList.remove('happy');
+            }, 1000);
+            
+            dogStats.happiness = Math.min(100, dogStats.happiness + 8);
+            dogStats.health = Math.min(100, dogStats.health + 2);
+            
+            updateDogDisplay();
+            updateDogStatus(getRandomMessage('happy'));
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97fb9e0642c67e44',t:'MTc1Nzk3NTkzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
